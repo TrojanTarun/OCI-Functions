@@ -1,0 +1,5 @@
+name: my-java-function
+version: 0.0.1
+runtime: java
+memory: 256
+timeout: 30

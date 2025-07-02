@@ -18,7 +18,7 @@ This repository demonstrates how to develop, deploy, and manage a Java-based Ora
 ---
 
 ## 📁 Project Structure
-
+``````
 oci-function-java-vbs/
 ├── function/
 │   ├── func.yaml                  # Function metadata (name, runtime, etc.)
@@ -34,7 +34,7 @@ oci-function-java-vbs/
 ├── oci-config/
 │   └── config.properties          # Optional local config for OCIDs
 └── README.md
-
+``````
 
 ---
 
@@ -60,29 +60,29 @@ oci-function-java-vbs/
 ---
 
 ## 🔄 Step 2: Clone Repository Locally
-
-`bash
+bash
+``````
 git clone https://<your-vbs-project-url>.git
 cd oci-java-function-project
-
+``````
 
 ---
 
 🏗️ Step 3: Add Java Function Code
 
 func.yaml
-
+``````
 name: my-java-function
 version: 0.0.1
 runtime: java
 memory: 256
 timeout: 30
-
+``````
 
 ---
 
 Function.java
-
+``````
 package com.example;
 
 public class Function {
@@ -90,12 +90,12 @@ public class Function {
         return "Hello, " + input + " from OCI Java Function!";
     }
 }
-
+``````
 
 ---
 
 pom.xml
-
+``````
 <project>
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.example</groupId>
@@ -121,12 +121,12 @@ pom.xml
     </plugins>
   </build>
 </project>
-
+``````
 
 ---
 
 ⚙️ Step 4: Set Up .vbs/buildspec.yaml
-
+``````
 version: 0.1
 steps:
   - name: Build Java Function
@@ -148,16 +148,16 @@ steps:
         value: my-oci-function-app
     commands:
       - fn deploy --app $OCI_APP --region $OCI_REGION
-
+``````
 
 ---
 
 🔁 Step 5: Git Push to Trigger Pipeline
-
+``````
 git add .
 git commit -m "Initial OCI Function with VBS"
 git push origin main
-
+``````
 If Git triggers are enabled in VBS, this will automatically run the build and deploy pipeline.
 
 

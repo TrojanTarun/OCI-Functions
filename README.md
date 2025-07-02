@@ -1,7 +1,3 @@
-> Tarun:
-Certainly! Below is a production-grade README.md file containing complete documentation for building, deploying, and maintaining a Java-based OCI Function using Oracle Visual Builder Studio (VBS) and Git. It's structured clearly for onboarding new developers or DevOps engineers into the setup.
-
-
 ---
 
 # 🚀 Java-based OCI Function Deployment using Oracle Visual Builder Studio (VBS)

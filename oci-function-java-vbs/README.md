@@ -225,15 +225,6 @@ Avoid committing secrets in config.properties or source code.
 
 ---
 
-📌 Best Practices
-
-Practice Benefit
-
-Git branching (dev, main) Safe parallel development
-Fn logs Debugging failed invocations
-Modular function logic Better testability
-Pipeline notifications Alerting on failures
-Tags and Releases Controlled production deployments
 
 
 

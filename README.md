@@ -1,4 +1,4 @@
-# ☁️ Modify & Redeploy Java OCI Function via OCI Cloud Shell
+# ☁️ Modify & Re-deploy Java OCI Function via OCI Cloud Shell
 
 Summary
 ```

@@ -22,7 +22,7 @@ cd ~/functions/pdf-unlock-func
 Confirm presence of:
 ```
 func.yaml
-src/main/java/com/pos28/fn/Main.java
+src/main/java/com/fun/fn/Main.java
 ```
 
 ---
@@ -31,7 +31,7 @@ src/main/java/com/pos28/fn/Main.java
 
 Open the Java file in a terminal editor:
 ```
-nano src/main/java/com/pos28/fn/Main.java
+nano src/main/java/com/fun/fn/Main.java
 ```
 Paste your modified code. 
 Ctrl + O → Enter → Ctrl + X
@@ -63,7 +63,7 @@ docker login <namespace>.ocir.io
 Example:
 ```
 docker login mytenancy.ocir.io
-Username: mytenancy/tarun.kumar@example.com
+Username: mytenancy/Trojan.Tarun@gmail.com
 Password: <your-auth-token>
 ```
 You must use an OCI Auth Token, not your OCI password.

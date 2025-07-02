@@ -1,239 +1,138 @@
----
+# ☁️ Modify & Redeploy Java OCI Function via OCI Cloud Shell
 
-# 🚀 Java-based OCI Function Deployment using Oracle Visual Builder Studio (VBS)
-
-This repository demonstrates how to develop, deploy, and manage a Java-based Oracle Cloud Infrastructure (OCI) Function using Oracle Visual Builder Studio (VBS) and Git. It includes the complete directory structure, build and deploy automation via CI/CD pipelines, and OCI best practices.
+This guide explains how to safely modify, build, and redeploy an existing Java OCI Function using only Oracle Cloud Shell. It includes commands and examples based on real use.
 
 ---
 
-## 🧰 Technologies Used
+## ✅ Prerequisites
 
-- Java 11
-- Oracle Cloud Functions (Fn Project)
-- Oracle Visual Builder Studio (VBS)
-- Git (hosted in VBS)
-- Maven (Fn Maven Plugin)
-- OCI CLI & Fn CLI (for local testing, optional)
-
----
-
-## 📁 Project Structure
-``````
-oci-function-java-vbs/
-├── function/
-│   ├── func.yaml                  # Function metadata (name, runtime, etc.)
-│   ├── pom.xml                    # Maven configuration
-│   └── src/
-│       └── main/
-│           └── java/
-│               └── com/
-│                   └── example/
-│                       └── Function.java    # Java function handler
-├── .vbs/
-│   └── buildspec.yaml             # VBS build pipeline config
-├── oci-config/
-│   └── config.properties          # Optional local config for OCIDs
-└── README.md
-``````
+- Function was created via fn init in OCI Cloud Shell
+- You have access to OCI Console and Cloud Shell
+- You know:
+  - Your tenancy namespace (for OCIR)
+  - Your OCI username
+  - Your Auth Token (not OCI password)
+- You know your Function's Application Name and optionally the Function OCID
 
 ---
 
-## 🚦 Pre-requisites
+## 🧭 Step 1: Open Cloud Shell and Navigate to Project
 
-| Tool | Required For |
-|------|--------------|
-| Oracle Cloud Account | Hosting and deploying OCI Function |
-| Oracle Visual Builder Studio | Git repository and CI/CD pipeline |
-| OCI CLI | (Optional) Local testing and deployment |
-| Fn CLI | (Optional) Local build and invoke |
-| Java 11 & Maven 3.6+ | Building Java function |
+Launch Cloud Shell from the OCI Console (top-right icon), then:
 
----
+`bash
+cd ~/functions/pdf-unlock-func
 
-## 🧑‍💻 Step 1: Create Project in Oracle VBS
-
-1. Log in to Oracle Visual Builder Studio.
-2. Go to Projects > Create Project > Git-Hosted Project.
-3. Name the project oci-java-function-project.
-4. Initialize a Git repository inside the project.
-
----
-
-## 🔄 Step 2: Clone Repository Locally
-bash
-``````
-git clone https://<your-vbs-project-url>.git
-cd oci-java-function-project
-``````
-
----
-
-🏗️ Step 3: Add Java Function Code
+Confirm presence of:
 
 func.yaml
-``````
-name: my-java-function
-version: 0.0.1
-runtime: java
-memory: 256
-timeout: 30
-``````
-
----
-
-Function.java
-``````
-package com.example;
-
-public class Function {
-    public String handleRequest(String input) {
-        return "Hello, " + input + " from OCI Java Function!";
-    }
-}
-``````
-
----
-
-pom.xml
-``````
-<project>
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.example</groupId>
-  <artifactId>oci-function</artifactId>
-  <version>1.0</version>
-  <packaging>jar</packaging>
-
-  <dependencies>
-    <dependency>
-      <groupId>com.fnproject.fn</groupId>
-      <artifactId>api</artifactId>
-      <version>1.0.121</version>
-    </dependency>
-  </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>com.fnproject.fn</groupId>
-        <artifactId>fn-maven-plugin</artifactId>
-        <version>1.0.121</version>
-      </plugin>
-    </plugins>
-  </build>
-</project>
-``````
-
----
-
-⚙️ Step 4: Set Up .vbs/buildspec.yaml
-``````
-version: 0.1
-steps:
-  - name: Build Java Function
-    image: maven:3.8.1-openjdk-11
-    shell: bash
-    workingDir: function
-    commands:
-      - mvn clean package
-      - fn build
-
-  - name: Deploy to OCI Function
-    image: oraclelinux:7
-    shell: bash
-    workingDir: function
-    env:
-      - name: OCI_REGION
-        value: ap-hyderabad-1
-      - name: OCI_APP
-        value: my-oci-function-app
-    commands:
-      - fn deploy --app $OCI_APP --region $OCI_REGION
-``````
-
----
-
-🔁 Step 5: Git Push to Trigger Pipeline
-``````
-git add .
-git commit -m "Initial OCI Function with VBS"
-git push origin main
-``````
-If Git triggers are enabled in VBS, this will automatically run the build and deploy pipeline.
+src/main/java/com/pos28/fn/Main.java
 
 
 ---
 
-🏗️ Step 6: Configure VBS Build Pipeline
+✏️ Step 2: Modify Java Code
 
-1. In your project, go to Build > Pipelines > Create Pipeline.
+Open the Java file in a terminal editor:
 
-2. Name it: oci-function-pipeline.
+nano src/main/java/com/pos28/fn/Main.java
 
-3. Select the repo and main branch.
-
-4. Point to .vbs/buildspec.yaml.
-
-5. Add OCI_REGION and OCI_APP as pipeline environment variables.
-
-6. Enable Git trigger for automatic CI/CD.
-
+Paste your modified code. 
+Ctrl + O → Enter → Ctrl + X
 
 
 
 ---
 
-🧪 Step 7: Test the Function
+🧱 Step 3: Build the Function
 
-From OCI Console:
-
-1. Go to Developer Services > Functions.
-
-2. Select your application and function.
-
-3. Use Test tab to provide payload like "World".
-
-
-
-Expected output:
-
-Hello, World from OCI Java Function!
-
-
----
-
-🛠 Optional: Local Test with Fn CLI
-
-fn start
-cd function
-mvn clean package
 fn build
-fn deploy --app my-oci-function-app --region ap-hyderabad-1
-fn invoke my-oci-function-app my-java-function
+
+This compiles the code and builds a Docker image locally in Cloud Shell.
 
 
 ---
 
-🔐 Security & Configuration
+🔐 Step 4: Docker Login to Oracle Container Registry (OCIR)
 
-Store sensitive values like OCIDs and secrets as VBS Environment Variables.
+First, get your tenancy namespace from:
 
-For production, use OCI Vault to manage secrets.
+Console → Object Storage → Namespace
 
-Avoid committing secrets in config.properties or source code.
+
+Then run:
+
+docker login <namespace>.ocir.io
+
+Example:
+
+docker login mytenancy.ocir.io
+Username: mytenancy/tarun.kumar@example.com
+Password: <your-auth-token>
+
+You must use an OCI Auth Token, not your OCI password.
+
+
+---
+
+🏷️ Step 5: Tag and Push the Docker Image
+
+Get the image ID:
+
+docker images
+
+Tag it for OCIR:
+
+docker tag <image-id> mytenancy.ocir.io/functions/pdf-unlock-func:v2
+
+Push to OCIR:
+
+docker push mytenancy.ocir.io/functions/pdf-unlock-func:v2
+
+
+---
+
+🔁 Step 6: Update OCI Function to Use New Image
+
+First, get the function OCID (if unknown):
+
+oci fn function list --application-id <your-app-ocid>
+
+Update it:
+
+oci fn function update \
+  --function-id ocid1.fnfunc.oc1..aaaaaaaaxyz \
+  --image mytenancy.ocir.io/functions/pdf-unlock-func:v2
+
+
+---
+
+▶️ Step 7: Invoke and Test Function
+
+fn invoke pdf-unlock-app pdf-unlock-func
+
+Or from OCI Console:
+
+Developer Services → Functions → Select Function → "Test"
 
 
 
 ---
 
-📌 Best Practices
+🧹 Optional: Remove Local Image
 
-Practice Benefit
-
-Git branching (dev, main) Safe parallel development
-Fn logs Debugging failed invocations
-Modular function logic Better testability
-Pipeline notifications Alerting on failures
-Tags and Releases Controlled production deployments
+docker rmi mytenancy.ocir.io/functions/pdf-unlock-func:v2
 
 
+---
 
+✅ Example Summary
+
+cd ~/functions/pdf-unlock-func
+nano src/main/java/com/pos28/fn/Main.java    # modify
+fn build
+docker login mytenancy.ocir.io               # one-time login
+docker tag c0ffee12345 mytenancy.ocir.io/functions/pdf-unlock-func:v2
+docker push mytenancy.ocir.io/functions/pdf-unlock-func:v2
+oci fn function update --function-id <fn-ocid> --image mytenancy.ocir.io/functions/pdf-unlock-func:v2
+fn invoke pdf-unlock-app pdf-unlock-func

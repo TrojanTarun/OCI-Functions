@@ -19,7 +19,22 @@ This repository demonstrates how to develop, deploy, and manage a Java-based Ora
 
 ## 📁 Project Structure
 
-oci-function-java-vbs/ │ ├── function/ │   ├── func.yaml                  # Function metadata (name, runtime, etc.) │   ├── pom.xml                    # Maven configuration │   └── src/ │       └── main/ │           └── java/ │               └── com/ │                   └── example/ │                       └── Function.java    # Java function handler │ ├── .vbs/ │   └── buildspec.yaml             # VBS build pipeline config │ ├── oci-config/ │   └── config.properties          # Optional local config for OCIDs │ └── README.md
+oci-function-java-vbs/
+├── function/
+│   ├── func.yaml                  # Function metadata (name, runtime, etc.)
+│   ├── pom.xml                    # Maven configuration
+│   └── src/
+│       └── main/
+│           └── java/
+│               └── com/
+│                   └── example/
+│                       └── Function.java    # Java function handler
+├── .vbs/
+│   └── buildspec.yaml             # VBS build pipeline config
+├── oci-config/
+│   └── config.properties          # Optional local config for OCIDs
+└── README.md
+
 
 ---
 

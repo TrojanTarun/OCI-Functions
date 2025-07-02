@@ -188,9 +188,7 @@ From OCI Console:
 
 1. Go to Developer Services > Functions.
 
-
 2. Select your application and function.
-
 
 3. Use Test tab to provide payload like "World".
 

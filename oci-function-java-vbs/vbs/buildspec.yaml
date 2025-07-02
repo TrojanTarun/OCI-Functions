@@ -1,0 +1,21 @@
+version: 0.1
+steps:
+  - name: Build Java OCI Function
+    image: maven:3.8.1-openjdk-11
+    shell: bash
+    workingDir: function
+    commands:
+      - mvn clean package
+      - fn build
+
+  - name: Deploy OCI Function
+    image: oraclelinux:7
+    shell: bash
+    workingDir: function
+    env:
+      - name: OCI_REGION
+        value: ap-hyderabad-1
+      - name: OCI_APP
+        value: my-oci-function-app
+    commands:
+      - fn deploy --app $OCI_APP --region $OCI_REGION
